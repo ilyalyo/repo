@@ -22,6 +22,10 @@
             android:name=".HTTPGET"
             android:label="@string/title_activity_httpget" >
         </activity>
+        <activity
+            android:name=".Statistic"
+            android:label="@string/title_activity_statistic" >
+        </activity>
     </application>
 
 </manifest>
