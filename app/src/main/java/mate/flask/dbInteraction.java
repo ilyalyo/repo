@@ -12,6 +12,8 @@ import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.net.URI;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,9 +83,9 @@ public class dbInteraction {
 
         java.util.Date dateTo = new java.util.Date();
         java.util.Date dateFrom = new java.util.Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
-
         Timestamp to= new Timestamp(dateTo.getTime());
         Timestamp from= new Timestamp(dateFrom.getTime());
+        Log.e("log_tag", "Error in json parse in getDataInterval " + from.toString());
 
         return getDataInterval(victim_id,from,to);
     }
@@ -92,15 +94,19 @@ public class dbInteraction {
 
         ArrayList<DataRecord> result=new ArrayList<DataRecord>();
         HTTPGET httpget=new HTTPGET();
-
-        httpget.execute("http://cc25673.tmweb.ru/get_by_user.php?us=" + user_id +"&ac="+ victim_id );
         try{
+            String url_from= URLEncoder.encode( from.toString() ,"UTF-8");
+            String url_to= URLEncoder.encode( to.toString() ,"UTF-8");
+            httpget.execute("http://cc25673.tmweb.ru/get_by_user.php?us=" + user_id +"&ac="+ victim_id+"&FROM="+ url_from+"&TO="+ url_to);
+
             String jsonString = httpget.get();
+            
             JSONParser parser=new JSONParser();
             Object obj = parser.parse(jsonString);
             JSONArray array = (JSONArray)obj;
 
             Iterator<org.json.simple.JSONArray> iterator= array.iterator();
+            Log.e("DataRecord_Print",""+jsonString);
             while( iterator.hasNext() ){
                 DataRecord dr=new DataRecord(iterator.next());
                 result.add(dr);

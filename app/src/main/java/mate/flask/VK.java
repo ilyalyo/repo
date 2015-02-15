@@ -22,7 +22,6 @@ public class VK {
         try{
             String jsonString = httpget.get();
 
-
             Object obj= JSONValue.parse(jsonString);
             JSONObject jobj=(JSONObject)obj;
             Object units = (JSONArray) jobj.get("response");

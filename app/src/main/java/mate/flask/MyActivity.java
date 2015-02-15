@@ -89,7 +89,7 @@ public class MyActivity extends Activity {
             lm.addView(lmm);
 
         }catch(Exception e) {
-            Log.e("log_tag", "Error in http connection " + e.toString());
+            Log.e("log_tag", "Error in myActivity " + e.toString());
         }
     }
 

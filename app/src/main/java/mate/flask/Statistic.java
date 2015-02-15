@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,12 @@ public class Statistic extends Activity {
 
         DrawGraph drawGraph = new DrawGraph(this);
         drawGraph.setBackgroundColor(Color.WHITE);
-        ScrollView scrollView = new ScrollView(this);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_statistic);
+
+//        Log.e("log_tag", "Error in statistic " + scrollView.getChildAt(0).toString());
+
+        scrollView=new ScrollView(this);
+      //  ScrollView scrollView = new ScrollView(this);
 
         scrollView.addView(drawGraph);
         setContentView(scrollView);
@@ -102,7 +108,7 @@ public class Statistic extends Activity {
             // TODO Auto-generated method stub
             canvas.drawColor(Color.WHITE);
 
-            height=0;
+            height=50;
             int rect_x=10;
             int line_x=200;
             boolean lastStatus=! dateRecords.get(0).isOnline;
