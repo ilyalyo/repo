@@ -85,7 +85,6 @@ public class dbInteraction {
         java.util.Date dateFrom = new java.util.Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
         Timestamp to= new Timestamp(dateTo.getTime());
         Timestamp from= new Timestamp(dateFrom.getTime());
-        Log.e("log_tag", "Error in json parse in getDataInterval " + from.toString());
 
         return getDataInterval(victim_id,from,to);
     }
@@ -100,7 +99,19 @@ public class dbInteraction {
             httpget.execute("http://cc25673.tmweb.ru/get_by_user.php?us=" + user_id +"&ac="+ victim_id+"&FROM="+ url_from+"&TO="+ url_to);
 
             String jsonString = httpget.get();
-            
+
+            Object obj= JSONValue.parse(jsonString);
+            JSONArray jobj=(JSONArray)obj;
+            for (int i =0;i<jobj.size();i++){
+                org.json.simple.JSONObject jrecord= (org.json.simple.JSONObject)jobj.get(i);
+                DataRecord record=new DataRecord(jrecord);
+                result.add(record);
+            }
+
+
+/*
+
+
             JSONParser parser=new JSONParser();
             Object obj = parser.parse(jsonString);
             JSONArray array = (JSONArray)obj;
@@ -112,6 +123,7 @@ public class dbInteraction {
                 result.add(dr);
             }
             Log.e("DataRecord_Print",""+victim_id);
+            */
         }catch(Exception e){
             Log.e("log_tag", "Error in json parse in getDataInterval " + e.toString());
         }
