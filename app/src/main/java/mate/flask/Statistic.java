@@ -20,6 +20,10 @@ import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,11 +32,23 @@ import java.util.Date;
 
 public class Statistic extends Activity {
 
+    static ArrayList<DataRecord> dateRecords;
+
+    int user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
 
+
+        Intent intent = getIntent();
+
+        user_id= intent.getIntExtra(MyActivity.EXTRA_MESSAGE,-1);
+
+        dateRecords=MyActivity.db.getDataInterval(user_id);
+
+        //Add tab host
         TabHost tabs = (TabHost) findViewById(R.id.tabHost);
         tabs.setup();
         TabHost.TabSpec spec = tabs.newTabSpec("tag1");
@@ -48,6 +64,7 @@ public class Statistic extends Activity {
 
         tabs.setCurrentTab(0);
 
+        //plot graph on statistic page
         try {
             DrawGraph drawGraph = new DrawGraph(this);
             drawGraph.setBackgroundColor(Color.WHITE);
@@ -57,6 +74,29 @@ public class Statistic extends Activity {
             Date date = new Date();
             textView.setText("Today is: " + dateFormat.format(date));
             scrollView.addView(drawGraph);
+
+
+            //plot graph on analytic page
+            GraphView graph = (GraphView) findViewById(R.id.graph);
+
+            ArrayList<AnalyticRecord> dataAnalytic= MyActivity.db.getAnalytic(user_id);
+            DataPoint[] analyticArray=new DataPoint[dataAnalytic.size()];
+            double max=0;
+            for(int i=0;i<dataAnalytic.size();i++){
+                analyticArray[i]=   new DataPoint(dataAnalytic.get(i).hour, dataAnalytic.get(i).ratio);
+                if(dataAnalytic.get(i).ratio>max)
+                    max=dataAnalytic.get(i).ratio;
+            }
+
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(23);
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(max+0.1);
+            graph.getViewport().setYAxisBoundsManual(true);
+            graph.getViewport().setXAxisBoundsManual(true);
+            
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(analyticArray);
+            graph.addSeries(series);
         }
         catch (Exception e)
         {
@@ -94,11 +134,7 @@ public class Statistic extends Activity {
         public DrawGraph(Context context) {
             super(context);
 
-            Intent intent = getIntent();
-
-            int user_id= intent.getIntExtra(MyActivity.EXTRA_MESSAGE,-1);
-
-            dateRecords=MyActivity.db.getDataInterval(user_id);
+            dateRecords=Statistic.dateRecords;
 
             bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.RGB_565);
 

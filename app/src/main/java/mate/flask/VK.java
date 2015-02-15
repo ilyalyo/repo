@@ -2,15 +2,9 @@ package mate.flask;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-
-import java.util.LinkedHashMap;
 
 /**
  * Created by Ilya_G on 11.02.2015.

@@ -79,6 +79,37 @@ public class dbInteraction {
         return result;
     }
 
+    public ArrayList<AnalyticRecord> getAnalytic(int victim_id){
+
+        ArrayList<AnalyticRecord> result=new ArrayList<AnalyticRecord>();
+        HTTPGET httpget=new HTTPGET();
+        try{
+            httpget.execute("http://cc25673.tmweb.ru/get_analytic.php?victim=" + victim_id);
+
+            String jsonString = httpget.get();
+
+            Object obj= JSONValue.parse(jsonString);
+            JSONArray jobj=(JSONArray)obj;
+            for (int i =0;i<jobj.size();i++){
+                org.json.simple.JSONObject jrecord= (org.json.simple.JSONObject)jobj.get(i);
+                AnalyticRecord record=new AnalyticRecord(jrecord);
+                result.add(record);
+            }
+        }catch(Exception e){
+            Log.e("log_tag", "Error in json parse in getAnalytic " + e.toString());
+        }
+        return result;
+    }
+
+    public ArrayList<DataRecord> getWeekDataInterval(int victim_id){
+        java.util.Date dateTo = new java.util.Date();
+        java.util.Date dateFrom = new java.util.Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L*7L);
+        Timestamp to= new Timestamp(dateTo.getTime());
+        Timestamp from= new Timestamp(dateFrom.getTime());
+
+        return getDataInterval(victim_id,from,to);
+    }
+
     public ArrayList<DataRecord> getDataInterval(int victim_id){
 
         java.util.Date dateTo = new java.util.Date();

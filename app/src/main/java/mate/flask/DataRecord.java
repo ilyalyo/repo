@@ -29,20 +29,6 @@ public class DataRecord {
         this.isMobile=isMobile;
     }
 
-    public DataRecord(JSONArray json){
-        Iterator<String> iterator = json.iterator();
-        try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date parsedDate = dateFormat.parse(iterator.next());
-            this.date= new java.sql.Timestamp(parsedDate.getTime());
-
-            this.isOnline="1".equals(iterator.next());
-            //this.isMobile=isMobile;
-        }catch(Exception e){//this generic but you can control another types of exception
-            Log.e("log_tag", "Error in json parse in DataRecord " + e.toString());
-        }
-    }
-
     public DataRecord(org.json.simple.JSONObject json){
         try{
             String device=((org.json.simple.JSONObject)json).get("device").toString();
