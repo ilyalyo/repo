@@ -17,10 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Statistic extends Activity {
@@ -28,28 +31,38 @@ public class Statistic extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(new DrawGraph(this));
+        setContentView(R.layout.activity_statistic);
 
+        TabHost tabs = (TabHost) findViewById(R.id.tabHost);
+        tabs.setup();
+        TabHost.TabSpec spec = tabs.newTabSpec("tag1");
 
-        DrawGraph drawGraph = new DrawGraph(this);
-        drawGraph.setBackgroundColor(Color.WHITE);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_statistic);
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("Статистика");
+        tabs.addTab(spec);
 
-//        Log.e("log_tag", "Error in statistic " + scrollView.getChildAt(0).toString());
+        spec = tabs.newTabSpec("tag2");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("Аналитика");
+        tabs.addTab(spec);
 
-        scrollView=new ScrollView(this);
-      //  ScrollView scrollView = new ScrollView(this);
+        tabs.setCurrentTab(0);
 
-        scrollView.addView(drawGraph);
-        setContentView(scrollView);
-
-        //Intent intent = getIntent();
-
-       // int user_id= intent.getIntExtra(MyActivity.EXTRA_MESSAGE,-1);
-
-     //   ArrayList<DataRecord> dateRecords=MyActivity.db.getDataInterval(user_id);
+        try {
+            DrawGraph drawGraph = new DrawGraph(this);
+            drawGraph.setBackgroundColor(Color.WHITE);
+            ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_statistic);
+            TextView textView = (TextView) findViewById(R.id.textView);
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM");
+            Date date = new Date();
+            textView.setText("Today is: " + dateFormat.format(date));
+            scrollView.addView(drawGraph);
+        }
+        catch (Exception e)
+        {
+            Log.e("log_tag", "Error in statistic " + e.toString());
+        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

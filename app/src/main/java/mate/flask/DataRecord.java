@@ -53,7 +53,6 @@ public class DataRecord {
             Date parsedDate = dateFormat.parse(date);
 
             this.date= new java.sql.Timestamp(parsedDate.getTime());
-            Log.e("log_tag", "Error in json parse in DataRecord " + this.date.toString());
 
             this.isOnline="1".equals(status);
             //this.isMobile="1".equals(device);

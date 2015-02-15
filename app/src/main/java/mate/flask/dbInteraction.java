@@ -107,23 +107,6 @@ public class dbInteraction {
                 DataRecord record=new DataRecord(jrecord);
                 result.add(record);
             }
-
-
-/*
-
-
-            JSONParser parser=new JSONParser();
-            Object obj = parser.parse(jsonString);
-            JSONArray array = (JSONArray)obj;
-
-            Iterator<org.json.simple.JSONArray> iterator= array.iterator();
-            Log.e("DataRecord_Print",""+jsonString);
-            while( iterator.hasNext() ){
-                DataRecord dr=new DataRecord(iterator.next());
-                result.add(dr);
-            }
-            Log.e("DataRecord_Print",""+victim_id);
-            */
         }catch(Exception e){
             Log.e("log_tag", "Error in json parse in getDataInterval " + e.toString());
         }
