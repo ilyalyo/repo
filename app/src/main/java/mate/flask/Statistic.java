@@ -94,7 +94,7 @@ public class Statistic extends Activity {
             graph.getViewport().setMaxY(max+0.1);
             graph.getViewport().setYAxisBoundsManual(true);
             graph.getViewport().setXAxisBoundsManual(true);
-            
+
             LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(analyticArray);
             graph.addSeries(series);
         }
