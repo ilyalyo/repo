@@ -4,18 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -29,11 +26,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
+/**
+ * Класс представляет из себя страницы Статистики и Аналитики
+ */
 public class Statistic extends Activity {
 
+    //информация о выбранном пользователе
     static ArrayList<DataRecord> dateRecords;
 
+    //ID выбранного пользователя
     int user_id;
 
     @Override
@@ -41,14 +42,14 @@ public class Statistic extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
 
-
+        //получаем id параметр переданный из MyActivity
         Intent intent = getIntent();
-
         user_id= intent.getIntExtra(MyActivity.EXTRA_MESSAGE,-1);
 
+        //получаем записи за 24 часа
         dateRecords=MyActivity.db.getDataInterval(user_id);
 
-        //Add tab host
+        //реализация 2х закладок
         TabHost tabs = (TabHost) findViewById(R.id.tabHost);
         tabs.setup();
         TabHost.TabSpec spec = tabs.newTabSpec("tag1");
@@ -64,22 +65,26 @@ public class Statistic extends Activity {
 
         tabs.setCurrentTab(0);
 
-        //plot graph on statistic page
+        //рисуем график аналитики на странице Аналитики
         try {
             DrawGraph drawGraph = new DrawGraph(this);
             drawGraph.setBackgroundColor(Color.WHITE);
+
             ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_statistic);
+
+            //пишем текущее число
             TextView textView = (TextView) findViewById(R.id.textView);
             DateFormat dateFormat = new SimpleDateFormat("dd.MM");
             Date date = new Date();
             textView.setText("Today is: " + dateFormat.format(date));
+
             scrollView.addView(drawGraph);
 
-
-            //plot graph on analytic page
             GraphView graph = (GraphView) findViewById(R.id.graph);
 
+            // строим содержимое вкладки Статистика
             ArrayList<AnalyticRecord> dataAnalytic= MyActivity.db.getAnalytic(user_id);
+
             DataPoint[] analyticArray=new DataPoint[dataAnalytic.size()];
             double max=0;
             for(int i=0;i<dataAnalytic.size();i++){
@@ -88,10 +93,13 @@ public class Statistic extends Activity {
                     max=dataAnalytic.get(i).ratio;
             }
 
+            //фиксированные границы у графика
             graph.getViewport().setMinX(0);
-            graph.getViewport().setMaxX(23);
             graph.getViewport().setMinY(0);
+
+            graph.getViewport().setMaxX(23);
             graph.getViewport().setMaxY(max+0.1);
+
             graph.getViewport().setYAxisBoundsManual(true);
             graph.getViewport().setXAxisBoundsManual(true);
 
@@ -100,7 +108,7 @@ public class Statistic extends Activity {
         }
         catch (Exception e)
         {
-            Log.e("log_tag", "Error in statistic " + e.toString());
+            Log.e("log_tag", "Error in Statistic " + e.toString());
         }
     }
 
@@ -123,6 +131,9 @@ public class Statistic extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Класс для рисования графика на вкладке Статистика
+     */
     private class DrawGraph extends View {
 
         Paint p;
@@ -140,27 +151,34 @@ public class Statistic extends Activity {
 
             p = new Paint();
 
+            //приблизительная длина простыни графика, надо что то с этим поделать=(
             height =dateRecords.size()*blockHeight+100;
         }
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            // Compute the height required to render the view
-            // Assume Width will always be MATCH_PARENT.
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height =dateRecords.size()*blockHeight+100; // Since 3000 is bottom of last Rect to be drawn added and 50 for padding.
+            int height =dateRecords.size()*blockHeight+100;
             setMeasuredDimension(width, height);
         }
 
+        /**
+         * @param canvas
+         * рисуем график
+         */
         @Override
         protected void onDraw(Canvas canvas) {
-            // TODO Auto-generated method stub
             canvas.drawColor(Color.WHITE);
 
+            //отступ сверху
             height=50;
+            //отступ слева для прямоугольников
             int rect_x=10;
+            //ширина прямоугольников
             int line_x=200;
+
             boolean lastStatus=! dateRecords.get(0).isOnline;
+            //сколько было записей было подряд без изменения статуса
             int inSequence=0;
 
             for(int i =0;i<dateRecords.size();i++){

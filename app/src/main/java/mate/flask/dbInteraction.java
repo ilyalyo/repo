@@ -1,38 +1,24 @@
 package mate.flask;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
-
-//import org.json.JSONObject;
-import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  * Created by Ilya_G on 09.02.2015.
+ * Класс для взаимодействия с БД
  */
 public class dbInteraction {
 
     private int user_id;
-
-  //  private HTTPGET httpget;
-
-//    public AsyncTask.Status isDone;
 
     public dbInteraction(int id){
         this.user_id=id;
@@ -44,14 +30,24 @@ public class dbInteraction {
         return false;
     }
 
+    /*
+        Еще не реализовано
+     */
     public boolean addVictim(int id){
         return false;
     }
 
+    /*
+        Еще не реализовано
+     */
     public boolean delVictim(int id){
         return false;
     }
 
+    /**
+     * @return
+     * Метод возвращает всех жертв( набор экземпляров класса User) текущего пользователя
+     */
     public ArrayList<User> getMyVictims(){
 
         ArrayList<User> result=new ArrayList<User>();
@@ -71,14 +67,19 @@ public class dbInteraction {
             {
                 int id=Integer.parseInt(iterator.next().get(0).toString());
                 result.add(vk.getUser(id));
-                //(new User(Integer.parseInt(iterator.next().get(0).toString())));
             }
         }catch(Exception e){
-            Log.e("log_tag", "Error in json parse in getMyVictims " + e.toString());
+            Log.e("log_tag", "Error in json parse in dbInteraction getMyVictims " + e.toString());
         }
         return result;
     }
 
+    /**
+     * @param victim_id
+     * @return
+     * Метод возвращает множество экземпляров AnalyticRecord
+     * по заданному id
+     */
     public ArrayList<AnalyticRecord> getAnalytic(int victim_id){
 
         ArrayList<AnalyticRecord> result=new ArrayList<AnalyticRecord>();
@@ -96,11 +97,16 @@ public class dbInteraction {
                 result.add(record);
             }
         }catch(Exception e){
-            Log.e("log_tag", "Error in json parse in getAnalytic " + e.toString());
+            Log.e("log_tag", "Error in json parse in dbInteraction getAnalytic " + e.toString());
         }
         return result;
     }
 
+    /**
+     * @param victim_id
+     * @return
+     * Записи о активности пользователя за неделю
+     */
     public ArrayList<DataRecord> getWeekDataInterval(int victim_id){
         java.util.Date dateTo = new java.util.Date();
         java.util.Date dateFrom = new java.util.Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L*7L);
@@ -110,6 +116,11 @@ public class dbInteraction {
         return getDataInterval(victim_id,from,to);
     }
 
+    /**
+     * @param victim_id
+     * @return
+     * * Записи о активности пользователя за 24 часа
+     */
     public ArrayList<DataRecord> getDataInterval(int victim_id){
 
         java.util.Date dateTo = new java.util.Date();
@@ -120,6 +131,13 @@ public class dbInteraction {
         return getDataInterval(victim_id,from,to);
     }
 
+    /**
+     * @param victim_id
+     * @param from
+     * @param to
+     * @return
+     * Записи о активности пользователя за заданный промежуток времени
+     */
     public ArrayList<DataRecord> getDataInterval(int victim_id, Timestamp from, Timestamp to){
 
         ArrayList<DataRecord> result=new ArrayList<DataRecord>();

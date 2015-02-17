@@ -1,19 +1,23 @@
 package mate.flask;
 
 import android.util.Log;
-//=)
 
 /**
  * Created by Ilya_G on 15.02.2015.
+ * Экземпляр класса - определенный час {0-23}(можно будет сделать ENUM),
+ * которому сопостовляется время проведенное в онлайне в этот час
+ * относитльно времение проведенном в онлайне вобщем
  */
 public class AnalyticRecord {
+
     int hour;
     double ratio;
 
-    public AnalyticRecord(int hour,double ratio){
-        this.hour=hour;
-        this.ratio=ratio;
-    }
+    /**
+     * @param json
+     * вызывется из класса dbInteraction, объект типа :
+     * [{"hours":"00","ratio":"0.0882"},{...},...]
+     */
     public AnalyticRecord(org.json.simple.JSONObject json){
         try{
             String hour= json.get("hours").toString();

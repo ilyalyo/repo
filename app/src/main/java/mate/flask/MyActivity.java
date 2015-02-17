@@ -15,12 +15,18 @@ import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
-
+/**
+ * Первая страница приложения
+ */
 public class MyActivity extends Activity {
 
+    //строка для передачи параметров в Statistic acivity
     public final static String EXTRA_MESSAGE = "mate.flask.MyActivity.user_id";
+
+    // заглушка - текущий пользователь
     private int USER_ID=25719572;
 
+    //объект для взаимодействия с БД
     public static dbInteraction db;
 
     @Override
@@ -31,55 +37,39 @@ public class MyActivity extends Activity {
         db=new dbInteraction(USER_ID);
         db.initialize();
 
+        //получаем всех жертв текущего пользователя
         ArrayList<User> users=db.getMyVictims();
-        db.getDataInterval(10379683);
 
-        //final LinearLayout lm = (LinearLayout) findViewById(R.id.linear);
+        //Визуализация списка жертв
         ScrollView lm = (ScrollView) findViewById(R.id.scrollView);
         final LinearLayout lmm = (LinearLayout) findViewById(R.id.linear);
+
         try{
             for(int i=0;i<users.size();i++)
             {
-                // Create LinearLayout
                 final LinearLayout ll = new LinearLayout(this);
 
                 ll.setOrientation(LinearLayout.VERTICAL);
-                // Create Button
+
                 final Button btn = new Button(this);
                 btn.setId(users.get(i).id);
                 btn.setText(users.get(i).first_name +" " + users.get(i).last_name);
 
                 WebView web = new WebView(this);
                 web.loadUrl(users.get(i).photo);
-
+                //костыль, фотки почему то мерцают
                 web.setBackgroundColor(Color.argb(1, 0, 0, 0));
-                btn.setOnClickListener(new View.OnClickListener() {
-                    int counter = 0;
-                    ArrayList<DataRecord> arr;
 
-                    private void init() {
-                        arr = new ArrayList<DataRecord>();
-                        try {
-                            arr = db.getDataInterval(btn.getId());
-                        } catch (Exception e) {
-                            Log.e("log_tag", "Error in view " + e.toString());
-                        }
-                    }
+                btn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
                         try{
-                            openStatistic(v,btn.getId());
+                            //переход на Statistic активити
+                            openStatistic(v, btn.getId());
                         }
                         catch(Exception e){
-                            Log.e("log_tag", "Error in view " + e.toString());
+                            Log.e("log_tag", "Error in MyActivity onClick " + e.toString());
                         }
-                      /*  TextView textv = new TextView(v.getContext());
-                        if (counter == 0)
-                            init();
-                        textv.setText(arr.get(counter).date.toString() + " | " + arr.get(counter).isOnline);
-                        if(arr.get(counter++).isOnline)
-                            textv.setBackgroundColor(Color.argb(150, 255, 92, 0));
-                        ll.addView(textv);*/
                     }
                 });
                 ll.addView(web);
@@ -89,10 +79,15 @@ public class MyActivity extends Activity {
             lm.addView(lmm);
 
         }catch(Exception e) {
-            Log.e("log_tag", "Error in myActivity " + e.toString());
+            Log.e("log_tag", "Error in MyActivity " + e.toString());
         }
     }
 
+    /**
+     * @param view
+     * @param id
+     * открываем новую Activity
+     */
     public void openStatistic(View view,int id) {
         Intent intent = new Intent(this, Statistic.class);
         intent.putExtra(EXTRA_MESSAGE, id);

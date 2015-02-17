@@ -1,30 +1,27 @@
 package mate.flask;
 
-import android.app.Activity;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 
-
+/**
+ * Класс позволяет отправлять Async GET HTTP запросы(В дальнейшем добавим POST)
+ * по заданому url(String...) и возвращать результат в String
+ */
 public class HTTPGET extends AsyncTask<String, String, String> {
 
     /*@Override
     protected void onPreExecute() {}
     */
+
     @Override
     protected String doInBackground(String... urls) {
         String url = urls[0];
@@ -39,7 +36,7 @@ public class HTTPGET extends AsyncTask<String, String, String> {
                     response.getEntity().getContent()));
             return in.readLine();
         } catch (Exception e) {
-            Log.e("log_tag", "Error in http connection " + e.toString());
+            Log.e("log_tag", "Error in HTTPGET " + e.toString());
         }
         return "";
     }
