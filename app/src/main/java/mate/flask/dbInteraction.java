@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
+//1
 /**
  * Created by Ilya_G on 09.02.2015.
  * Класс для взаимодействия с БД

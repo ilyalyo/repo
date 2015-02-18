@@ -13,14 +13,15 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('C:/Users/Ilya_G/AndroidStudioProjects/Flask/libs/json-simple-1.1.1.jar')
     compile 'com.jjoe64:graphview:4.0.0'
+    compile files('C:/Users/2/AndroidStudioProjects/repo/libs/json-simple-1.1.1.jar')
 }
