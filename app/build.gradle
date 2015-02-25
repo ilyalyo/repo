@@ -21,7 +21,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('C:/Users/Ilya_G/AndroidStudioProjects/Flask/libs/json-simple-1.1.1.jar')
     compile 'com.jjoe64:graphview:4.0.0'
-    compile files('C:/Users/2/AndroidStudioProjects/repo/libs/json-simple-1.1.1.jar')
+    compile files('../libs/json-simple-1.1.1.jar')
 }
