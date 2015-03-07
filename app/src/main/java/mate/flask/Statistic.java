@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -70,21 +71,29 @@ public class Statistic extends Activity {
             DrawGraph drawGraph = new DrawGraph(this);
             drawGraph.setBackgroundColor(Color.WHITE);
 
+            //пишем текущее число
             ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView_statistic);
 
-            //пишем текущее число
             TextView textView = (TextView) findViewById(R.id.textView);
             DateFormat dateFormat = new SimpleDateFormat("dd.MM");
-            Date date = new Date();
-            textView.setText("Today is: " + dateFormat.format(date));
+            textView.setText("Today is: " + dateFormat.format(new Date()));
 
             scrollView.addView(drawGraph);
 
-            GraphView graph = (GraphView) findViewById(R.id.graph);
 
             // строим содержимое вкладки Статистика
+            //GraphView graph = (GraphView) findViewById(R.id.graph);
+
+            LinearLayout scrollView2 = (LinearLayout) findViewById(R.id.tab2);
             ArrayList<AnalyticRecord> dataAnalytic= MyActivity.db.getAnalytic(user_id);
 
+            Log.e("log_tag", "1");
+            DrawStatistic drawStat = new DrawStatistic(this,dataAnalytic);
+            Log.e("log_tag", "1");
+            drawStat.setBackgroundColor(Color.WHITE);
+            //scrollView.addView(drawStat);
+            scrollView2.addView(drawStat);
+/*
             DataPoint[] analyticArray=new DataPoint[dataAnalytic.size()];
             double max=0;
             for(int i=0;i<dataAnalytic.size();i++){
@@ -104,7 +113,7 @@ public class Statistic extends Activity {
             graph.getViewport().setXAxisBoundsManual(true);
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(analyticArray);
-            graph.addSeries(series);
+            graph.addSeries(series);*/
         }
         catch (Exception e)
         {
@@ -144,7 +153,7 @@ public class Statistic extends Activity {
 
         public DrawGraph(Context context) {
             super(context);
-
+            Log.e("log_tag", "11");
             dateRecords=Statistic.dateRecords;
 
             bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.RGB_565);
@@ -157,6 +166,7 @@ public class Statistic extends Activity {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            Log.e("log_tag", "12");
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height =dateRecords.size()*blockHeight+100;
             setMeasuredDimension(width, height);
@@ -168,6 +178,7 @@ public class Statistic extends Activity {
          */
         @Override
         protected void onDraw(Canvas canvas) {
+            Log.e("log_tag", "13");
             canvas.drawColor(Color.WHITE);
 
             //отступ сверху

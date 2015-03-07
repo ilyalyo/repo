@@ -50,7 +50,7 @@ public class dbInteraction {
      */
     public ArrayList<User> getMyVictims(){
 
-        ArrayList<User> result=new ArrayList<User>();
+        ArrayList<Integer> users=new ArrayList<Integer>();
         HTTPGET httpget=new HTTPGET();
         httpget.execute("http://cc25673.tmweb.ru/get_by_user.php?us=" + user_id );
 
@@ -59,19 +59,19 @@ public class dbInteraction {
             JSONParser parser=new JSONParser();
             Object obj = parser.parse(jsonString);
             JSONArray array = (JSONArray)obj;
-            Log.e("log_tag_1", array.toString());
             Iterator<JSONArray> iterator= array.iterator();
 
             VK vk=new VK();
             while (iterator.hasNext())
             {
                 int id=Integer.parseInt(iterator.next().get(0).toString());
-                result.add(vk.getUser(id));
+                users.add(id);
             }
+            return vk.getUsers(users.toArray(new Integer[users.size()]));
         }catch(Exception e){
             Log.e("log_tag", "Error in json parse in dbInteraction getMyVictims " + e.toString());
         }
-        return result;
+        return null;
     }
 
     /**

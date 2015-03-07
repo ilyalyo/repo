@@ -33,20 +33,17 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-
         db=new dbInteraction(USER_ID);
         db.initialize();
-
         //получаем всех жертв текущего пользователя
         ArrayList<User> users=db.getMyVictims();
-
         //Визуализация списка жертв
         ScrollView lm = (ScrollView) findViewById(R.id.scrollView);
         final LinearLayout lmm = (LinearLayout) findViewById(R.id.linear);
-
         try{
             for(int i=0;i<users.size();i++)
             {
+
                 final LinearLayout ll = new LinearLayout(this);
 
                 ll.setOrientation(LinearLayout.VERTICAL);
@@ -77,7 +74,7 @@ public class MyActivity extends Activity {
                 lmm.addView(ll);
             }
             lm.addView(lmm);
-
+            Log.e("log_tag", "END");
         }catch(Exception e) {
             Log.e("log_tag", "Error in MyActivity " + e.toString());
         }

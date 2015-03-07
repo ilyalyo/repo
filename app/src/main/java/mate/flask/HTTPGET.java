@@ -27,18 +27,18 @@ public class HTTPGET extends AsyncTask<String, String, String> {
         String url = urls[0];
         BufferedReader in = null;
         try {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
-            URI website = new URI(url);
-            request.setURI(website);
-            HttpResponse response = httpclient.execute(request);
-            in = new BufferedReader(new InputStreamReader(
-                    response.getEntity().getContent()));
-            return in.readLine();
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI(url);
+                request.setURI(website);
+                HttpResponse response = httpclient.execute(request);
+                in = new BufferedReader(new InputStreamReader(
+                        response.getEntity().getContent()));
+                return in.readLine();
         } catch (Exception e) {
             Log.e("log_tag", "Error in HTTPGET " + e.toString());
         }
-        return "";
+        return null;
     }
 
    /* @Override

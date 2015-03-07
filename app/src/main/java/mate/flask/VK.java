@@ -6,19 +6,70 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.util.ArrayList;
+
 /**
  * Created by Ilya_G on 11.02.2015.
  * Класс для взаимодействия с VK
  */
 public class VK {
+    public ArrayList<User> getUsers(Integer [] ids ){
+
+        ArrayList<User> users=new ArrayList<User>();
+
+        HTTPGET httpget=new HTTPGET();
+        String url="https://api.vk.com/method/users.get?user_ids=";
+
+        for(int i=0;i<ids.length-1;i++)
+            url+= ids[i] +",";
+        url+=ids[ids.length-1]+"&fields=photo_50";
+        httpget.execute(url);
+
+        try{
+            Log.e("log_tag", "Step n");
+            String jsonString = httpget.get();
+            Log.e("log_tag", "Step n+1");
+
+            Object obj= JSONValue.parse(jsonString);
+            Log.e("log_tag", "Step n+1");
+            JSONObject jobj1=(JSONObject)obj;
+            Log.e("log_tag", "Step n+1");
+            Object units = jobj1.get("response");
+            Log.e("log_tag", "Step n+1");
+            JSONArray jobj=(JSONArray)units;
+            Log.e("log_tag", "Step n+1");
+            for (int i =0;i<jobj.size();i++){
+                org.json.simple.JSONObject jrecord= (org.json.simple.JSONObject)jobj.get(i);
+                User record=new User(jrecord);
+                users.add(record);
+            }
+
+             /*   Object obj= JSONValue.parse(jsonString);
+                JSONObject jobj=(JSONObject)obj;
+                Object units = jobj.get("response");
+
+                String first_name=((JSONObject)((JSONArray)units).get(0)).get("first_name").toString();
+                String last_name=((JSONObject)((JSONArray)units).get(0)).get("last_name").toString();
+                String photo=((JSONObject)((JSONArray)units).get(0)).get("photo_50").toString();
+
+                users.add( new User(ids[1],first_name,last_name,photo));*/
+        return users;
+
+        }catch(Exception e){
+            Log.e("log_tag", "Error in json parse in VK" + e.toString());
+        }
+        return null;
+    }
 
     public User getUser(int id){
 
         HTTPGET httpget=new HTTPGET();
         httpget.execute("https://api.vk.com/method/users.get?user_id=" +id +"&fields=photo_50");
         try{
-            String jsonString = httpget.get();
+            Log.e("log_tag", "Step n");
 
+            String jsonString = httpget.get();
+            Log.e("log_tag", "Step n+1");
             Object obj= JSONValue.parse(jsonString);
             JSONObject jobj=(JSONObject)obj;
             Object units = jobj.get("response");

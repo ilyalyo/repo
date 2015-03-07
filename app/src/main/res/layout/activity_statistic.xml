@@ -27,7 +27,8 @@
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top"></TabWidget>
+                android:gravity="top"
+                android:layout_marginTop="-14dp"></TabWidget>
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
@@ -75,12 +76,15 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:orientation="horizontal">
+                    <ScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/scrollView_St2"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="40dp" >
 
-                    <com.jjoe64.graphview.GraphView
-                        android:layout_width="match_parent"
-                        android:layout_height="200dip"
-                        android:id="@+id/graph" />
-
+                    </ScrollView>
                 </LinearLayout>
 
             </FrameLayout>
