@@ -4,27 +4,29 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- ic_launcher -->
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/tmp"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MyActivity"
+            android:name=".NavigationActivity"
             android:label="@string/app_name" >
+
+        </activity>
+        <activity
+            android:name=".Statistic"
+            android:label="@string/title_activity_statistic" >
+        </activity>
+        <activity
+            android:name=".MyActivity"
+            android:label="@string/title_activity_navigation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".HTTPGET"
-            android:label="@string/title_activity_httpget" >
-        </activity>
-        <activity
-            android:name=".Statistic"
-            android:label="@string/title_activity_statistic" >
         </activity>
     </application>
 

@@ -42,6 +42,10 @@ public class User {
         }
     }
 
+    public String toString(){
+        String result = this.first_name + " " + this.last_name;
+        return result;
+    }
 
     public void print(){
         Log.e("DataRecord_Print", "id " + id);

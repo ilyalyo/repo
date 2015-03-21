@@ -26,18 +26,12 @@ public class VK {
         httpget.execute(url);
 
         try{
-            Log.e("log_tag", "Step n");
             String jsonString = httpget.get();
-            Log.e("log_tag", "Step n+1");
 
             Object obj= JSONValue.parse(jsonString);
-            Log.e("log_tag", "Step n+1");
             JSONObject jobj1=(JSONObject)obj;
-            Log.e("log_tag", "Step n+1");
             Object units = jobj1.get("response");
-            Log.e("log_tag", "Step n+1");
             JSONArray jobj=(JSONArray)units;
-            Log.e("log_tag", "Step n+1");
             for (int i =0;i<jobj.size();i++){
                 org.json.simple.JSONObject jrecord= (org.json.simple.JSONObject)jobj.get(i);
                 User record=new User(jrecord);
@@ -66,10 +60,8 @@ public class VK {
         HTTPGET httpget=new HTTPGET();
         httpget.execute("https://api.vk.com/method/users.get?user_id=" +id +"&fields=photo_50");
         try{
-            Log.e("log_tag", "Step n");
 
             String jsonString = httpget.get();
-            Log.e("log_tag", "Step n+1");
             Object obj= JSONValue.parse(jsonString);
             JSONObject jobj=(JSONObject)obj;
             Object units = jobj.get("response");
